@@ -15,7 +15,7 @@ DEFINES += FTP
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
-DEFINES += QT_DEPRECATED_WARNINGS
+DEFINES += QT_DEPRECATED_WARNINGS DOWNLOAD
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -36,7 +36,8 @@ SOURCES += \
     ftp-server/ftpretrcommand.cpp \
     ftp-server/ftpserver.cpp \
     ftp-server/ftpstorcommand.cpp \
-    ftp-server/sslserver.cpp
+    ftp-server/sslserver.cpp \
+    downloadmanager.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -49,7 +50,8 @@ HEADERS += \
     ftp-server/ftpretrcommand.h \
     ftp-server/ftpserver.h \
     ftp-server/ftpstorcommand.h \
-    ftp-server/sslserver.h
+    ftp-server/sslserver.h \
+    downloadmanager.h
 
 FORMS += \
         mainwindow.ui \

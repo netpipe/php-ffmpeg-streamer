@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "ftp-server/ftpgui.h"
+#include "downloadmanager.h"
+
 
 #ifdef FTP
     FTPGUI *ftpgui;
@@ -31,4 +33,7 @@ void MainWindow::on_ftpServerbtn_clicked()
     }
     if (adminftp) { ftpgui->show();}
 #endif
+
+
+
 }

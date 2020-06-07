@@ -11,6 +11,13 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+#if DOWNLOADs
+    void Download(QString URL);
+    DownloadManager manager;
+void Upload(QString URL,QString User,QString Password,QString port);
+
+#endif
+
     int adminftp=0;
 public:
     explicit MainWindow(QWidget *parent = nullptr);

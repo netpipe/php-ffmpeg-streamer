@@ -12,7 +12,7 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DFTP -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
+DEFINES       = -DFTP -DQT_DEPRECATED_WARNINGS -DDOWNLOAD -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtNetwork -isystem /usr/include/qt5/QtCore -I. -isystem /usr/include/libdrm -I. -I/usr/lib64/qt5/mkspecs/linux-g++
@@ -35,7 +35,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = qftpserver1.0.0
-DISTDIR = /home/netpipe/public_html/streaming/streamer/qFTP-Server-Client/.tmp/qftpserver1.0.0
+DISTDIR = /home/netpipe/qtprojects/php-ffmpeg-streamer/software/.tmp/qftpserver1.0.0
 LINK          = g++
 LFLAGS        = 
 LIBS          = $(SUBLIBS) -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Network -lQt5Core -lGL -lpthread 
@@ -61,7 +61,8 @@ SOURCES       = main.cpp \
 		ftp-server/ftpretrcommand.cpp \
 		ftp-server/ftpserver.cpp \
 		ftp-server/ftpstorcommand.cpp \
-		ftp-server/sslserver.cpp moc_mainwindow.cpp \
+		ftp-server/sslserver.cpp \
+		downloadmanager.cpp moc_mainwindow.cpp \
 		moc_dataconnection.cpp \
 		moc_debuglogdialog.cpp \
 		moc_ftpcommand.cpp \
@@ -71,7 +72,8 @@ SOURCES       = main.cpp \
 		moc_ftpretrcommand.cpp \
 		moc_ftpserver.cpp \
 		moc_ftpstorcommand.cpp \
-		moc_sslserver.cpp
+		moc_sslserver.cpp \
+		moc_downloadmanager.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		dataconnection.o \
@@ -84,6 +86,7 @@ OBJECTS       = main.o \
 		ftpserver.o \
 		ftpstorcommand.o \
 		sslserver.o \
+		downloadmanager.o \
 		moc_mainwindow.o \
 		moc_dataconnection.o \
 		moc_debuglogdialog.o \
@@ -94,7 +97,8 @@ OBJECTS       = main.o \
 		moc_ftpretrcommand.o \
 		moc_ftpserver.o \
 		moc_ftpstorcommand.o \
-		moc_sslserver.o
+		moc_sslserver.o \
+		moc_downloadmanager.o
 DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
 		/usr/lib64/qt5/mkspecs/common/linux.conf \
@@ -290,7 +294,8 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		ftp-server/ftpretrcommand.h \
 		ftp-server/ftpserver.h \
 		ftp-server/ftpstorcommand.h \
-		ftp-server/sslserver.h main.cpp \
+		ftp-server/sslserver.h \
+		downloadmanager.h main.cpp \
 		mainwindow.cpp \
 		ftp-server/dataconnection.cpp \
 		ftp-server/debuglogdialog.cpp \
@@ -301,7 +306,8 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		ftp-server/ftpretrcommand.cpp \
 		ftp-server/ftpserver.cpp \
 		ftp-server/ftpstorcommand.cpp \
-		ftp-server/sslserver.cpp
+		ftp-server/sslserver.cpp \
+		downloadmanager.cpp
 QMAKE_TARGET  = qftpserver
 DESTDIR       = 
 TARGET        = qftpserver
@@ -709,8 +715,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib64/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h ftp-server/dataconnection.h ftp-server/debuglogdialog.h ftp-server/ftpcommand.h ftp-server/ftpcontrolconnection.h ftp-server/ftpgui.h ftp-server/ftplistcommand.h ftp-server/ftpretrcommand.h ftp-server/ftpserver.h ftp-server/ftpstorcommand.h ftp-server/sslserver.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp ftp-server/dataconnection.cpp ftp-server/debuglogdialog.cpp ftp-server/ftpcommand.cpp ftp-server/ftpcontrolconnection.cpp ftp-server/ftpgui.cpp ftp-server/ftplistcommand.cpp ftp-server/ftpretrcommand.cpp ftp-server/ftpserver.cpp ftp-server/ftpstorcommand.cpp ftp-server/sslserver.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h ftp-server/dataconnection.h ftp-server/debuglogdialog.h ftp-server/ftpcommand.h ftp-server/ftpcontrolconnection.h ftp-server/ftpgui.h ftp-server/ftplistcommand.h ftp-server/ftpretrcommand.h ftp-server/ftpserver.h ftp-server/ftpstorcommand.h ftp-server/sslserver.h downloadmanager.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindow.cpp ftp-server/dataconnection.cpp ftp-server/debuglogdialog.cpp ftp-server/ftpcommand.cpp ftp-server/ftpcontrolconnection.cpp ftp-server/ftpgui.cpp ftp-server/ftplistcommand.cpp ftp-server/ftpretrcommand.cpp ftp-server/ftpserver.cpp ftp-server/ftpstorcommand.cpp ftp-server/sslserver.cpp downloadmanager.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui ftp-server/debuglogdialog.ui ftp-server/ftpgui.ui $(DISTDIR)/
 
 
@@ -743,66 +749,71 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib64/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h /usr/lib64/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_dataconnection.cpp moc_debuglogdialog.cpp moc_ftpcommand.cpp moc_ftpcontrolconnection.cpp moc_ftpgui.cpp moc_ftplistcommand.cpp moc_ftpretrcommand.cpp moc_ftpserver.cpp moc_ftpstorcommand.cpp moc_sslserver.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_dataconnection.cpp moc_debuglogdialog.cpp moc_ftpcommand.cpp moc_ftpcontrolconnection.cpp moc_ftpgui.cpp moc_ftplistcommand.cpp moc_ftpretrcommand.cpp moc_ftpserver.cpp moc_ftpstorcommand.cpp moc_sslserver.cpp moc_downloadmanager.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_dataconnection.cpp moc_debuglogdialog.cpp moc_ftpcommand.cpp moc_ftpcontrolconnection.cpp moc_ftpgui.cpp moc_ftplistcommand.cpp moc_ftpretrcommand.cpp moc_ftpserver.cpp moc_ftpstorcommand.cpp moc_sslserver.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_dataconnection.cpp moc_debuglogdialog.cpp moc_ftpcommand.cpp moc_ftpcontrolconnection.cpp moc_ftpgui.cpp moc_ftplistcommand.cpp moc_ftpretrcommand.cpp moc_ftpserver.cpp moc_ftpstorcommand.cpp moc_sslserver.cpp moc_downloadmanager.cpp
 moc_mainwindow.cpp: mainwindow.h \
 		moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
-	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/public_html/streaming/streamer/qFTP-Server-Client -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include mainwindow.h -o moc_mainwindow.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/qtprojects/php-ffmpeg-streamer/software -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include mainwindow.h -o moc_mainwindow.cpp
 
 moc_dataconnection.cpp: ftp-server/dataconnection.h \
 		moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
-	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/public_html/streaming/streamer/qFTP-Server-Client -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/dataconnection.h -o moc_dataconnection.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/qtprojects/php-ffmpeg-streamer/software -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/dataconnection.h -o moc_dataconnection.cpp
 
 moc_debuglogdialog.cpp: ftp-server/debuglogdialog.h \
 		moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
-	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/public_html/streaming/streamer/qFTP-Server-Client -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/debuglogdialog.h -o moc_debuglogdialog.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/qtprojects/php-ffmpeg-streamer/software -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/debuglogdialog.h -o moc_debuglogdialog.cpp
 
 moc_ftpcommand.cpp: ftp-server/ftpcommand.h \
 		moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
-	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/public_html/streaming/streamer/qFTP-Server-Client -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftpcommand.h -o moc_ftpcommand.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/qtprojects/php-ffmpeg-streamer/software -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftpcommand.h -o moc_ftpcommand.cpp
 
 moc_ftpcontrolconnection.cpp: ftp-server/ftpcontrolconnection.h \
 		moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
-	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/public_html/streaming/streamer/qFTP-Server-Client -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftpcontrolconnection.h -o moc_ftpcontrolconnection.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/qtprojects/php-ffmpeg-streamer/software -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftpcontrolconnection.h -o moc_ftpcontrolconnection.cpp
 
 moc_ftpgui.cpp: ftp-server/ftpgui.h \
 		moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
-	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/public_html/streaming/streamer/qFTP-Server-Client -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftpgui.h -o moc_ftpgui.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/qtprojects/php-ffmpeg-streamer/software -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftpgui.h -o moc_ftpgui.cpp
 
 moc_ftplistcommand.cpp: ftp-server/ftpcommand.h \
 		ftp-server/ftplistcommand.h \
 		moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
-	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/public_html/streaming/streamer/qFTP-Server-Client -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftplistcommand.h -o moc_ftplistcommand.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/qtprojects/php-ffmpeg-streamer/software -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftplistcommand.h -o moc_ftplistcommand.cpp
 
 moc_ftpretrcommand.cpp: ftp-server/ftpcommand.h \
 		ftp-server/ftpretrcommand.h \
 		moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
-	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/public_html/streaming/streamer/qFTP-Server-Client -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftpretrcommand.h -o moc_ftpretrcommand.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/qtprojects/php-ffmpeg-streamer/software -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftpretrcommand.h -o moc_ftpretrcommand.cpp
 
 moc_ftpserver.cpp: ftp-server/ftpserver.h \
 		moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
-	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/public_html/streaming/streamer/qFTP-Server-Client -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftpserver.h -o moc_ftpserver.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/qtprojects/php-ffmpeg-streamer/software -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftpserver.h -o moc_ftpserver.cpp
 
 moc_ftpstorcommand.cpp: ftp-server/ftpcommand.h \
 		ftp-server/ftpstorcommand.h \
 		moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
-	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/public_html/streaming/streamer/qFTP-Server-Client -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftpstorcommand.h -o moc_ftpstorcommand.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/qtprojects/php-ffmpeg-streamer/software -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/ftpstorcommand.h -o moc_ftpstorcommand.cpp
 
 moc_sslserver.cpp: ftp-server/sslserver.h \
 		moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
-	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/public_html/streaming/streamer/qFTP-Server-Client -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/sslserver.h -o moc_sslserver.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/qtprojects/php-ffmpeg-streamer/software -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include ftp-server/sslserver.h -o moc_sslserver.cpp
+
+moc_downloadmanager.cpp: downloadmanager.h \
+		moc_predefs.h \
+		/usr/lib64/qt5/bin/moc
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/netpipe/qtprojects/php-ffmpeg-streamer/software -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-suse-linux -I/usr/include/c++/7/backward -I/usr/lib64/gcc/x86_64-suse-linux/7/include -I/usr/local/include -I/usr/lib64/gcc/x86_64-suse-linux/7/include-fixed -I/usr/x86_64-suse-linux/include -I/usr/include downloadmanager.h -o moc_downloadmanager.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -836,7 +847,8 @@ main.o: main.cpp mainwindow.h
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
 		ui_mainwindow.h \
-		ftp-server/ftpgui.h
+		ftp-server/ftpgui.h \
+		downloadmanager.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 dataconnection.o: ftp-server/dataconnection.cpp ftp-server/dataconnection.h \
@@ -886,6 +898,9 @@ ftpstorcommand.o: ftp-server/ftpstorcommand.cpp ftp-server/ftpstorcommand.h \
 sslserver.o: ftp-server/sslserver.cpp ftp-server/sslserver.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sslserver.o ftp-server/sslserver.cpp
 
+downloadmanager.o: downloadmanager.cpp downloadmanager.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o downloadmanager.o downloadmanager.cpp
+
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
 
@@ -918,6 +933,9 @@ moc_ftpstorcommand.o: moc_ftpstorcommand.cpp
 
 moc_sslserver.o: moc_sslserver.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_sslserver.o moc_sslserver.cpp
+
+moc_downloadmanager.o: moc_downloadmanager.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_downloadmanager.o moc_downloadmanager.cpp
 
 ####### Install
 

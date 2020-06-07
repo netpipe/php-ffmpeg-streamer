@@ -27,6 +27,19 @@
      <string>FtpServer</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="ftpServerbtn_2">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>110</y>
+      <width>88</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stream</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
