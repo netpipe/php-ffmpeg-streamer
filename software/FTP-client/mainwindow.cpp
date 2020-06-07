@@ -246,3 +246,15 @@ void MainWindow::on_Btn_download_clicked()
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(replyError(QNetworkReply::NetworkError)));
     }
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    //scan directory for new files then upload
+    while (streaming){
+    QDirIterator it(".//", QStringList() << "*.webm", QDir::Files, QDirIterator::Subdirectories);
+        while (it.hasNext()){
+          //  QFileInfo fileInfo(f.fileName());
+            ui->cmbTheme->addItem(it.next().toLatin1());
+        }
+    }
+}

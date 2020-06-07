@@ -37,10 +37,14 @@ public slots:
 
     void replyError(QNetworkReply::NetworkError error);
 
+    void streaming();
+
 private slots:
     void on_Btn_upload_clicked();
 
     void on_Btn_download_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;
