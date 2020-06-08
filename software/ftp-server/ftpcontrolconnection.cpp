@@ -467,10 +467,17 @@ if (userslist){ //and file exists
            USERNAME = names.at(i).toLatin1();
            PASSWORD = passwords.at(i).toLatin1();
                    qDebug() << "username found";
+
+
+
                 }
 
-
+        if (names.count() > 1){
+            qDebug() << "multiple users found";
+            //match password
+        }
     }
+
 
 
 }
@@ -478,6 +485,12 @@ if (userslist){ //and file exists
     if (this->password.isEmpty() || ("USER" == command && USERNAME.toLatin1() == commandParameters && PASSWORD.toLatin1() == password)) {
         reply("230 You are logged in.");
         isLoggedIn = true;
+
+        QDate dNow(QDate::currentDate());
+        dNow.toString("dd-MM-yyyy");
+            QDir().mkdir( USERNAME.toLatin1() );
+        QDir().mkdir(USERNAME.toLatin1()+"/"+ dNow.toString("dd-MM-yyyy") );
+
     } else {
         reply("530 User name or password was incorrect.");
     }

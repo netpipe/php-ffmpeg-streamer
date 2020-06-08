@@ -290,7 +290,7 @@ void MainWindow::on_Btn_download_clicked()
     }
 }
 
-void MainWindow::on_streambtn_clicked()
+void MainWindow::on_streambtn_clicked() //thread so gui is still responsive
 {
     //scan directory for new files then upload
     QString USER;
@@ -315,22 +315,23 @@ void MainWindow::on_streambtn_clicked()
     streaming=1;
    // QProcess::startDetached("kill", {QString::number(pid)});
 
-//    QString Filename;
-//    QString OldFilename;
-//    QStringList files;
-//    while (streaming){
+    QString Filename;
+    QString OldFilename;
+    QStringList files;
+    while (streaming){
+//qDebug() << dNow.toString("dd-MM-yyyy");
+QThread::sleep(5);
+        QDirIterator it("./"+dNow.toString("dd-MM-yyyy")+"/", QStringList() << "*.webm", QDir::Files, QDirIterator::Subdirectories);
+        while (it.hasNext()){
+          //  QFileInfo fileInfo(f.fileName());
+          //  ui->cmbTheme->addItem(it.next().toLatin1());
+         //   dNow.toString("dd.MM.yyyy");
+         //   "./stream/"
+            files << it.next().toLatin1();
+        }
 
-//        QDirIterator it("./"+dNow.toString("dd.MM.yyyy")+"/", QStringList() << "*.webm", QDir::Files, QDirIterator::Subdirectories);
-//        while (it.hasNext()){
-//          //  QFileInfo fileInfo(f.fileName());
-//          //  ui->cmbTheme->addItem(it.next().toLatin1());
-//         //   dNow.toString("dd.MM.yyyy");
-//         //   "./stream/"
-//            files << it.next().toLatin1();
-//        }
 
-
-//    qSort(files);
+    qSort(files);
 
 ////    for (int i=0; i < files.count(); i++){
 ////                //if files.count() > cache rm files
@@ -339,17 +340,17 @@ void MainWindow::on_streambtn_clicked()
 ////        }
 ////    }
 
-//     Filename = files.at(files.count()).toLatin1();
+     Filename = files.at(files.count()-1).toLatin1();
 
-//    if (Filename != OldFilename){
-//        OldFilename = Filename;
-//        //QString URL,QString User,QString Password,QString port,QString filePath
-//    //    manager.Upload("ftp://127.0.0.1","admin","qt","8258",Filename.toLatin1());
-//        //"ftp://admin:qt@127.0.0.1:8258"
+    if (Filename.toLatin1() != OldFilename.toLatin1()){
+        OldFilename = Filename;
+        //QString URL,QString User,QString Password,QString port,QString filePath
+        manager.Upload("ftp://127.0.0.1/"+ui->lineEdit_user->text().toLatin1()+"/"+dNow.toString("dd-MM-yyyy")+"/","admin","qt","8258",Filename.toLatin1());
+        //"ftp://admin:qt@127.0.0.1:8258"
+        qDebug() << "uploading file" << Filename.toLatin1();
+    }
 
-//    }
-
-//    }
+    }
 
 
 }
@@ -360,4 +361,32 @@ void MainWindow::on_stop_clicked()
         QProcess::startDetached("killall", {"ffmpeg","-9"});
         streaming = 0;
              //process2.kill();
+}
+
+void MainWindow::on_test_clicked()
+{
+    QDate dNow(QDate::currentDate());
+
+    QString Filename;
+    QStringList files;
+
+
+
+//qDebug() << dNow.toString("dd-MM-yyyy");
+
+        QDirIterator it("./"+dNow.toString("dd-MM-yyyy")+"/", QStringList() << "*.webm", QDir::Files, QDirIterator::Subdirectories);
+        while (it.hasNext()){
+          //  QFileInfo fileInfo(f.fileName());
+          //  ui->cmbTheme->addItem(it.next().toLatin1());
+         //   dNow.toString("dd.MM.yyyy");
+         //   "./stream/"
+            files << it.next().toLatin1();
+        }
+        Filename = files.at(files.count()-1).toLatin1();
+
+
+        qDebug() << "uploading file" << Filename.toLatin1();
+
+    manager.Upload("ftp://127.0.0.1/"+ui->lineEdit_user->text().toLatin1()+"/"+dNow.toString("dd-MM-yyyy")+"/","admin","qt","8258",Filename.toLatin1());
+
 }

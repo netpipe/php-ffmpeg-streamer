@@ -29,6 +29,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_ftpServerbtn_clicked()
 {
+
 #ifdef FTP
     if (adminftp==0){
     ftpgui = new FTPGUI;
@@ -36,6 +37,7 @@ void MainWindow::on_ftpServerbtn_clicked()
     }
     if (adminftp) { ftpgui->show();}
 #endif
+
 
 
 
